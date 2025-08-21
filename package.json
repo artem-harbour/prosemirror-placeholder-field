@@ -1,0 +1,42 @@
+{
+  "name": "prosemirror-placeholder-field",
+  "version": "0.0.1",
+  "description": "ProseMirror placeholder field",
+  "license": "MIT",
+  "keywords": [
+    "prosemirror"
+  ],
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "sideEffects": false,
+  "files": [
+    "src",
+    "dist"
+  ],
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "rollup": "^4.47.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.9.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/artemnistuley/prosemirror-placeholder-field"
+  },
+  "scripts": {
+    "start": "npm --prefix ./demo run start",
+    "dev": "npm run start",
+    "prebuild": "rm -rf dist",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "reset": "rm -rf ./node_modules && rm -rf ./package-lock.json && npm install"
+  }
+}
