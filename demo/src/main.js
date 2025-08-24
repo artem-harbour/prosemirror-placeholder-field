@@ -8,27 +8,36 @@ import './style.css';
 import { EditorState } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 import { Schema, DOMParser } from 'prosemirror-model';
-import { schema } from 'prosemirror-schema-basic';
+import { schema as baseSchema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
-import { sayHello } from 'prosemirror-placeholder-field';
+import { 
+  placeholderFieldNode, 
+  PlaceholderFieldView, 
+  findPlaceholderFieldsBetween
+} from 'prosemirror-placeholder-field';
 
-const nodes = addListNodes(schema.spec.nodes, 'paragraph block*', 'block');
-const demoSchema = new Schema({
-  nodes,
-  marks: schema.spec.marks,
+const nodes = addListNodes(baseSchema.spec.nodes, 'paragraph block*', 'block');
+
+const schema = new Schema({
+  nodes: nodes.append(placeholderFieldNode()),
+  marks: baseSchema.spec.marks,
 });
 
 const plugins = [
-  ...exampleSetup({ schema: demoSchema }),
+  ...exampleSetup({ schema }),
 ];
 
 const state = EditorState.create({
-  doc: DOMParser.fromSchema(demoSchema).parse(document.querySelector("#content")),
+  doc: DOMParser.fromSchema(schema).parse(document.querySelector("#content")),
   plugins,
 });
 
-const view = new EditorView(document.querySelector('#editor'), { state });
-window.view = view;
+const view = new EditorView(document.querySelector('#editor'), { 
+  state,
+  nodeViews: {
+    placeholderField: (node, view, getPos, decorations) => new PlaceholderFieldView({ node, view, getPos, decorations }),
+  },
+});
 
-sayHello('Joe');
+window.view = view;

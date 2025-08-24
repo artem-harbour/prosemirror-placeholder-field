@@ -24,3 +24,5 @@ notes.txt
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+example/
