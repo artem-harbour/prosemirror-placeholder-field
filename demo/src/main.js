@@ -14,7 +14,8 @@ import { exampleSetup } from 'prosemirror-example-setup';
 import { 
   placeholderFieldNode, 
   PlaceholderFieldView, 
-  findPlaceholderFieldsBetween
+  placeholderFieldDrop,
+  placeholderFieldPaste,
 } from 'prosemirror-placeholder-field';
 
 const nodes = addListNodes(baseSchema.spec.nodes, 'paragraph block*', 'block');
@@ -26,6 +27,8 @@ const schema = new Schema({
 
 const plugins = [
   ...exampleSetup({ schema }),
+  placeholderFieldDrop(),
+  placeholderFieldPaste(),
 ];
 
 const state = EditorState.create({
@@ -41,3 +44,5 @@ const view = new EditorView(document.querySelector('#editor'), {
 });
 
 window.view = view;
+
+// insertPlaceholderField(2, { label: 'Text field', id: `222` })(view.state, view.dispatch);

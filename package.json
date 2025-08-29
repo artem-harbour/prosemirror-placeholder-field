@@ -20,7 +20,9 @@
     "dist"
   ],
   "dependencies": {
-    "prosemirror-model": "^1.25.3"
+    "prosemirror-commands": "^1.7.1",
+    "prosemirror-model": "^1.25.3",
+    "prosemirror-state": "^1.4.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",

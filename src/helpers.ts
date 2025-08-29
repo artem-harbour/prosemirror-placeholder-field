@@ -78,7 +78,7 @@ export function findPlaceholderFields(state, predicate) {
   return placeholderFields;
 }
 
-export function findPlaceholderFieldsById(state, idOrArray) {
+export function findPlaceholderFieldsById(idOrArray, state) {
   const placeholderFields = findPlaceholderFields(state, (node) => {
     if (Array.isArray(idOrArray)) {
       return isPlaceholderField(node) && idOrArray.includes(node.attrs.id);
@@ -89,7 +89,7 @@ export function findPlaceholderFieldsById(state, idOrArray) {
   return placeholderFields;
 }
 
-export function findPlaceholderFieldsBetween(state, from, to) {
+export function findPlaceholderFieldsBetween(from, to, state) {
   const placeholderFields: any = [];
 
   state.doc.nodesBetween(from, to, (node, pos) => {
