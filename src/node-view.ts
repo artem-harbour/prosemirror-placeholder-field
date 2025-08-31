@@ -46,15 +46,13 @@ export class PlaceholderFieldView {
   }
 
   createElement() {
-    const { attrs } = this.node;
-
     const element = document.createElement('span');
     element.classList.add(placeholderFieldClass);
 
     const contentElement = document.createElement('span');
     contentElement.classList.add(placeholderFieldContentClass);
-    contentElement.style.pointerEvents = 'none';
     contentElement.contentEditable = 'false';
+    contentElement.style.pointerEvents = 'none';
 
     element.append(contentElement);
 
@@ -79,6 +77,7 @@ export class PlaceholderFieldView {
   buildView() {
     const handlers = {
       text: () => this.buildTextView(),
+      url: () => this.buildUrlView(),
       default: () => this.buildTextView(),
     };
 
@@ -90,6 +89,23 @@ export class PlaceholderFieldView {
     const { attrs } = this.node;
     const { element, contentElement } = this.createElement();
     contentElement.textContent = attrs.value || attrs.label;
+    this.root = element;
+  }
+
+  buildUrlView() {
+    const { attrs } = this.node;
+    const { element, contentElement } = this.createElement();
+    if (attrs.value) {
+      const link = document.createElement('a');
+      link.href = attrs.value;
+      link.target = '_blank';
+      link.textContent = attrs.value;
+      link.style.textDecoration = 'none';
+      contentElement.append(link);
+      contentElement.style.pointerEvents = 'all';
+    } else {
+      contentElement.textContent = attrs.label;
+    }
     this.root = element;
   }
 
@@ -108,6 +124,7 @@ export class PlaceholderFieldView {
 
     const handlers = {
       text: () => this.updateTextView(),
+      url: () => this.updateUrlView(),
       default: () => this.updateTextView(),
     };
 
@@ -121,6 +138,23 @@ export class PlaceholderFieldView {
     const { attrs } = this.node;
     const contentElement = this.dom.firstElementChild;
     contentElement.textContent = attrs.value || attrs.label;
+  }
+
+  updateUrlView() {
+    const { attrs } = this.node;
+    const contentElement = this.dom.firstElementChild;
+    if (attrs.value) {
+      const link = document.createElement('a');
+      link.href = attrs.value;
+      link.target = '_blank';
+      link.textContent = attrs.value;
+      link.style.textDecoration = 'none';
+      contentElement.replaceChildren(link)
+      contentElement.style.pointerEvents = 'all';
+    } else {
+      contentElement.textContent = attrs.label;
+      contentElement.style.pointerEvents = 'none';
+    }
   }
 
   addEventListeners() {
@@ -153,7 +187,7 @@ export class PlaceholderFieldView {
     if (!this.view.editable) {
       return;
     }
-    
+
     document.dispatchEvent(new CustomEvent('placeholderFieldDoubleClick', {
       bubbles: true,
       detail: {
