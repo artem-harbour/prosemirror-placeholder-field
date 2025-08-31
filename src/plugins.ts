@@ -66,7 +66,7 @@ function handleDropOutside({ placeholderField, view, event }) {
   });
 
   if (coordinates) {
-    document.dispatchEvent(new CustomEvent('placeholderFieldDropped', {
+    document.dispatchEvent(new CustomEvent('placeholderFieldDrop', {
       bubbles: true,
       detail: {
         view,
