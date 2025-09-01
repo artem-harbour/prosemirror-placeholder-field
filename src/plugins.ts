@@ -3,9 +3,11 @@ import { insertPlaceholderField } from './commands';
 
 export const placeholderFieldDropKey = new PluginKey('placeholderFieldDrop');
 
-export function placeholderFieldDrop({
-  handleOutside = false,
-} = {}): Plugin {
+export function placeholderFieldDrop(
+  options: { handleOutside?: boolean } = {}
+): Plugin {
+  const handleOutside = options.handleOutside ?? false;
+  
   return new Plugin({
     key: placeholderFieldDropKey,
     props: {
