@@ -1,12 +1,17 @@
+import { Node } from 'prosemirror-model';
+import type { Command } from 'prosemirror-state';
 import { findPlaceholderFieldsById } from './helpers';
 
-export function insertPlaceholderField(pos, attrs = {}) {
+export function insertPlaceholderField(
+  pos: number, 
+  attrs: Record<string, any> = {}
+): Command {
   return (state, dispatch) => {
     if (dispatch) {
       const insertPos = pos;
       const $pos = state.doc.resolve(insertPos);
       const currentMarks = $pos.marks();
-      const marks = currentMarks.length ? [...currentMarks] : null;
+      const marks = currentMarks.length ? [...currentMarks] : undefined;
       const node = state.schema.nodes.placeholderField.create({ ...attrs }, null, marks);
       dispatch(state.tr.insert(insertPos, node));
     }
@@ -14,7 +19,9 @@ export function insertPlaceholderField(pos, attrs = {}) {
   };
 }
 
-export function deletePlaceholderField(fields) {
+export function deletePlaceholderField(
+  fields: Array<{ node: Node, pos: number }>
+): Command {
   return (state, dispatch) => {
     if (!fields.length) return true;
     if (dispatch) {
@@ -24,7 +31,7 @@ export function deletePlaceholderField(fields) {
         const posFrom = tr.mapping.map(pos);
         const posTo = tr.mapping.map(pos + node.nodeSize);
         const currentNode = tr.doc.nodeAt(posFrom);
-        if (node.eq(currentNode)) {
+        if (currentNode && node.eq(currentNode)) {
           tr.delete(posFrom, posTo);
         }
       });
@@ -34,7 +41,10 @@ export function deletePlaceholderField(fields) {
   };
 }
 
-export function updatePlaceholderFieldAttrs(fields, attrs = {}) {
+export function updatePlaceholderFieldAttrs(
+  fields: Array<{ node: Node, pos: number }>, 
+  attrs: Record<string, any> = {}
+): Command {
   return (state, dispatch) => {
     if (dispatch) {
       const tr = state.tr;
@@ -42,7 +52,7 @@ export function updatePlaceholderFieldAttrs(fields, attrs = {}) {
         const { node, pos } = field;
         const posMapped = tr.mapping.map(pos);
         const currentNode = tr.doc.nodeAt(pos);
-        if (node.type.name === currentNode.type.name) {
+        if (node.type.name === currentNode?.type.name) {
           tr.setNodeMarkup(posMapped, undefined, {
             ...node.attrs,
             ...attrs,
@@ -55,9 +65,12 @@ export function updatePlaceholderFieldAttrs(fields, attrs = {}) {
   };
 }
 
-export function updatePlaceholderFieldById(idOrArray, attrs = {}) {
+export function updatePlaceholderFieldById(
+  id: string | string[], 
+  attrs = {}
+): Command {
   return (state, dispatch) => {
-    const fields = findPlaceholderFieldsById(idOrArray, state);
+    const fields = findPlaceholderFieldsById(id, state);
     if (!fields.length) return true;
     if (dispatch) {
       return updatePlaceholderFieldAttrs(fields, attrs)(state, dispatch);
@@ -66,9 +79,11 @@ export function updatePlaceholderFieldById(idOrArray, attrs = {}) {
   };
 }
 
-export function deletePlaceholderFieldById(idOrArray) {
+export function deletePlaceholderFieldById(
+  id: string | string[]
+): Command {
   return (state, dispatch) => {
-    const fields = findPlaceholderFieldsById(idOrArray, state);
+    const fields = findPlaceholderFieldsById(id, state);
     if (!fields.length) return true;
     if (dispatch) {
       const tr = state.tr;
