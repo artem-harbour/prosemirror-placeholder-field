@@ -1,5 +1,5 @@
 import { Node } from 'prosemirror-model';
-import type { Command } from 'prosemirror-state';
+import { Command } from 'prosemirror-state';
 import { findPlaceholderFieldsById } from './helpers';
 
 export function insertPlaceholderField(
@@ -92,7 +92,7 @@ export function deletePlaceholderFieldById(
         const posFrom = tr.mapping.map(pos);
         const posTo = tr.mapping.map(pos + node.nodeSize);
         const currentNode = tr.doc.nodeAt(posFrom);
-        if (node.eq(currentNode)) {
+        if (currentNode && node.eq(currentNode)) {
           tr.delete(posFrom, posTo);
         }
       });

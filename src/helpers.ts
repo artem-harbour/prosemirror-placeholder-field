@@ -1,16 +1,5 @@
-import type { Node } from 'prosemirror-model';
-
-/**
- * @public
- */
-export type MutableAttrs = Record<string, unknown>;
-
-export type Predicate = (node: Node) => boolean;
-
-export type NodeWithPos = {
-  node: Node
-  pos: number
-};
+import { Node } from 'prosemirror-model';
+import { EditorState } from 'prosemirror-state';
 
 const defaultBooleans = [
   'required',
@@ -21,9 +10,12 @@ const defaultBooleans = [
   'autofocus',
 ];
 
-export function updateDOMAttributes(dom, attrs = {}, {
-  customBooleans = [],
-} = {}) {  
+export function updateDOMAttributes(
+  dom: HTMLElement, 
+  attrs: Record<string, any> = {}, 
+  options: { customBooleans?: string[] } = {},
+): void {  
+  const customBooleans = options.customBooleans || [];
   const booleans = [...defaultBooleans, ...customBooleans];
 
   Object.entries(attrs).forEach(([key, value]) => {
@@ -41,12 +33,15 @@ export function updateDOMAttributes(dom, attrs = {}, {
   });
 }
 
-export function isPlaceholderField(node) {
+export function isPlaceholderField(node: Node): boolean {
   return node.type.name === 'placeholderField';
 }
 
-function findChildren(node: Node, predicate: Predicate): NodeWithPos[] {
-  const nodesWithPos: NodeWithPos[] = [];
+function findChildren(
+  node: Node, 
+  predicate: (node: Node) => boolean,
+): Array<{ node: Node, pos: number }> {
+  const nodesWithPos: Array<{ node: Node, pos: number }> = [];
 
   node.descendants((child, pos) => {
     if (predicate(child)) {
@@ -60,12 +55,17 @@ function findChildren(node: Node, predicate: Predicate): NodeWithPos[] {
   return nodesWithPos;
 }
 
-export function getAllPlaceholderFields(state) {
+export function getAllPlaceholderFields(
+  state: EditorState,
+): Array<{ node: Node, pos: number }> {
   const result = findChildren(state.doc, (node) => isPlaceholderField(node));
   return result;
 }
 
-export function findPlaceholderFields(state, predicate) {
+export function findPlaceholderFields(
+  predicate: (node) => boolean, 
+  state: EditorState,
+): Array<{ node: Node, pos: number }> {
   const allPlaceholderFields = getAllPlaceholderFields(state);
   const placeholderFields: any = [];
 
@@ -78,19 +78,26 @@ export function findPlaceholderFields(state, predicate) {
   return placeholderFields;
 }
 
-export function findPlaceholderFieldsById(idOrArray, state) {
-  const placeholderFields = findPlaceholderFields(state, (node) => {
-    if (Array.isArray(idOrArray)) {
-      return isPlaceholderField(node) && idOrArray.includes(node.attrs.id);
+export function findPlaceholderFieldsById(
+  id: string | string[], 
+  state: EditorState,
+): Array<{ node: Node, pos: number }> {
+  const placeholderFields = findPlaceholderFields((node) => {
+    if (Array.isArray(id)) {
+      return isPlaceholderField(node) && id.includes(node.attrs.id);
     } else {
-      return isPlaceholderField(node) && node.attrs.id === idOrArray;
+      return isPlaceholderField(node) && node.attrs.id === id;
     }
-  });
+  }, state);
   return placeholderFields;
 }
 
-export function findPlaceholderFieldsBetween(from, to, state) {
-  const placeholderFields: any = [];
+export function findPlaceholderFieldsBetween(
+  from: number, 
+  to: number, 
+  state: EditorState,
+): Array<{ node: Node, pos: number }> {
+  const placeholderFields: Array<{ node: Node, pos: number }> = [];
 
   state.doc.nodesBetween(from, to, (node, pos) => {
     if (!node || node?.nodeSize === undefined) {

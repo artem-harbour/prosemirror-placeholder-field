@@ -2,7 +2,8 @@ import {
   Attrs,
   Node,
 } from 'prosemirror-model';
-import { MutableAttrs } from './helpers';
+
+type MutableAttrs = Record<string, unknown>;
 
 /**
  * @public
