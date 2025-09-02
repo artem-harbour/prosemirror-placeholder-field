@@ -1,60 +1,25 @@
-import {
-  Attrs,
-  Node,
-} from 'prosemirror-model';
-
-type MutableAttrs = Record<string, unknown>;
-
-/**
- * @public
- */
-export type getFromDOM = (dom: HTMLElement) => unknown;
-
-/**
- * @public
- */
-export type setDOMAttr = (value: unknown, attrs: MutableAttrs) => void;
-
-/**
- * @public
- */
-export interface PlaceholderFieldAttributes {
-  default: unknown;
-
-  validate?: string | ((value: unknown) => void);
-
-  getFromDOM?: getFromDOM;
-
-  setDOMAttr?: setDOMAttr;
-}
-
-/**
- * @public
- */
-export interface PlaceholderFieldNodeOptions {
-  color?: string,
-  extraAttributes?: { [key: string]: PlaceholderFieldAttributes };
-}
+import { 
+  MutableAttrs,
+  PlaceholderFieldNodeOptions,
+} from './types';
+import { Attrs, Node, AttributeSpec } from 'prosemirror-model';
 
 export const placeholderFieldTypeName = 'placeholderField';
 
 export const placeholderFieldClass = 'placeholder-field';
 export const placeholderFieldContentClass = 'placeholder-field__content';
 
-/**
- * @public
- */
 export function placeholderFieldNode(options: PlaceholderFieldNodeOptions = {}) {
   const extraAttrs = options.extraAttributes || {};
   const defaultColor = options.color || '#7c3aed';
-  
-  const attrs = {
+
+  const attrs: Record<string, AttributeSpec> = {
     id: { default: null, validate: 'string|null' },
     kind: { default: 'text', validate: 'string|null' },
+    name: { default: null, validate: 'string|null' },
     value: { default: null, validate: 'string|null' },
     label: { default: null, validate: 'string|null' },
     color: { default: defaultColor, validate: 'string|null' },
-    // TODO: hidden, highlighted, fieldKind
   };
 
   for (const prop in extraAttrs) {
@@ -89,6 +54,7 @@ function getPlaceholderFieldAttrs(dom: HTMLElement | string, extraAttrs: Attrs):
   const result: MutableAttrs = {
     id: dom.getAttribute('data-id'),
     kind: dom.getAttribute('data-kind'),
+    name: dom.getAttribute('data-name'),
     value: dom.getAttribute('data-value'),
     label: dom.getAttribute('data-label'),
     color: dom.getAttribute('data-color'),
@@ -103,7 +69,7 @@ function getPlaceholderFieldAttrs(dom: HTMLElement | string, extraAttrs: Attrs):
   return result;
 }
 
-function placeholderFieldToDOM(node, extraAttrs) {
+function placeholderFieldToDOM(node: Node, extraAttrs: Attrs) {
   const attrs = node.attrs;
   const domAttrs = setPlaceholderFieldDOMAttrs(node, extraAttrs);
 
@@ -111,8 +77,8 @@ function placeholderFieldToDOM(node, extraAttrs) {
     class: placeholderFieldContentClass,
     contenteditable: 'false',
   };
-  const contentContainer = ['span', contentAttrs, attrs.label ?? ''];
 
+  const contentContainer = ['span', contentAttrs, attrs.label ?? ''];
   return ['span', domAttrs, contentContainer];
 }
 
@@ -124,6 +90,7 @@ export function setPlaceholderFieldDOMAttrs(node: Node, extraAttrs: Attrs): Attr
     'data-placeholder-field': '',
     'data-id': attrs.id != null ? String(attrs.id) : undefined,
     'data-kind':  attrs.kind != null ? String(attrs.kind) : undefined,
+    'data-name':  attrs.name != null ? String(attrs.name) : undefined,
     'data-value': attrs.value != null ? String(attrs.value) : undefined,
     'data-label': attrs.label != null ? String(attrs.label) : undefined,
     'data-color': attrs.color != null ? String(attrs.color) : undefined,

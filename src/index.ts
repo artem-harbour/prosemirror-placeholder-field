@@ -1,9 +1,20 @@
+import { 
+  NodeWithPos,
+  MutableAttrs,
+  getFromDOM,
+  setDOMAttr,
+  PlaceholderFieldAttributes,
+  PlaceholderFieldNodeOptions,
+} from './types';
+
 import { placeholderFieldNode } from './schema';
 import { PlaceholderFieldView } from './node-view';
 
 import {
   placeholderFieldDrop,
+  placeholderFieldDropKey,
   placeholderFieldPaste,
+  placeholderFieldPasteKey,
 } from './plugins';
 
 import { 
@@ -24,6 +35,14 @@ import {
 } from './helpers';
 
 export {
+  // types
+  NodeWithPos,
+  MutableAttrs,
+  getFromDOM,
+  setDOMAttr,
+  PlaceholderFieldAttributes,
+  PlaceholderFieldNodeOptions,
+
   // schema
   placeholderFieldNode,
 
@@ -32,7 +51,9 @@ export {
 
   // plugins
   placeholderFieldDrop,
+  placeholderFieldDropKey,
   placeholderFieldPaste,
+  placeholderFieldPasteKey,
 
   // commands
   insertPlaceholderField,

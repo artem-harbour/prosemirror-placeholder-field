@@ -1,4 +1,5 @@
 import { Node } from 'prosemirror-model';
+import { NodeWithPos } from './types';
 import { EditorState } from 'prosemirror-state';
 
 const defaultBooleans = [
@@ -40,8 +41,8 @@ export function isPlaceholderField(node: Node): boolean {
 function findChildren(
   node: Node, 
   predicate: (node: Node) => boolean,
-): Array<{ node: Node, pos: number }> {
-  const nodesWithPos: Array<{ node: Node, pos: number }> = [];
+): NodeWithPos[] {
+  const nodesWithPos: NodeWithPos[] = [];
 
   node.descendants((child, pos) => {
     if (predicate(child)) {
@@ -57,7 +58,7 @@ function findChildren(
 
 export function getAllPlaceholderFields(
   state: EditorState,
-): Array<{ node: Node, pos: number }> {
+): NodeWithPos[] {
   const result = findChildren(state.doc, (node) => isPlaceholderField(node));
   return result;
 }
@@ -65,7 +66,7 @@ export function getAllPlaceholderFields(
 export function findPlaceholderFields(
   predicate: (node) => boolean, 
   state: EditorState,
-): Array<{ node: Node, pos: number }> {
+): NodeWithPos[] {
   const allPlaceholderFields = getAllPlaceholderFields(state);
   const placeholderFields: any = [];
 
@@ -81,7 +82,7 @@ export function findPlaceholderFields(
 export function findPlaceholderFieldsById(
   id: string | string[], 
   state: EditorState,
-): Array<{ node: Node, pos: number }> {
+): NodeWithPos[] {
   const placeholderFields = findPlaceholderFields((node) => {
     if (Array.isArray(id)) {
       return isPlaceholderField(node) && id.includes(node.attrs.id);
@@ -96,8 +97,8 @@ export function findPlaceholderFieldsBetween(
   from: number, 
   to: number, 
   state: EditorState,
-): Array<{ node: Node, pos: number }> {
-  const placeholderFields: Array<{ node: Node, pos: number }> = [];
+): NodeWithPos[] {
+  const placeholderFields: NodeWithPos[] = [];
 
   state.doc.nodesBetween(from, to, (node, pos) => {
     if (!node || node?.nodeSize === undefined) {

@@ -1,5 +1,5 @@
-import { Node } from 'prosemirror-model';
 import { Command } from 'prosemirror-state';
+import { NodeWithPos } from './types';
 import { findPlaceholderFieldsById } from './helpers';
 
 export function insertPlaceholderField(
@@ -20,7 +20,7 @@ export function insertPlaceholderField(
 }
 
 export function deletePlaceholderField(
-  fields: Array<{ node: Node, pos: number }>
+  fields: NodeWithPos[]
 ): Command {
   return (state, dispatch) => {
     if (!fields.length) return true;
@@ -42,7 +42,7 @@ export function deletePlaceholderField(
 }
 
 export function updatePlaceholderFieldAttrs(
-  fields: Array<{ node: Node, pos: number }>, 
+  fields: NodeWithPos[], 
   attrs: Record<string, any> = {}
 ): Command {
   return (state, dispatch) => {
@@ -67,7 +67,7 @@ export function updatePlaceholderFieldAttrs(
 
 export function updatePlaceholderFieldById(
   id: string | string[], 
-  attrs = {}
+  attrs: Record<string, any> = {}
 ): Command {
   return (state, dispatch) => {
     const fields = findPlaceholderFieldsById(id, state);
