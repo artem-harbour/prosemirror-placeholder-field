@@ -1,4 +1,5 @@
 import type { Node } from 'prosemirror-model';
+import { EditorView } from 'prosemirror-view';
 
 export type NodeWithPos = {
   node: Node
@@ -24,4 +25,14 @@ export interface PlaceholderFieldAttributes {
 export interface PlaceholderFieldNodeOptions {
   color?: string,
   extraAttributes?: { [key: string]: PlaceholderFieldAttributes };
+}
+
+export interface NodeViewUserOptions {}
+
+export interface NodeViewSpec {
+  node: Node
+  view: EditorView
+  getPos: () => number | undefined
+
+  options: NodeViewUserOptions
 }

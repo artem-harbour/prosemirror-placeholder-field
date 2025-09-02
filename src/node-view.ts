@@ -1,30 +1,27 @@
+
+import { NodeViewSpec, NodeViewUserOptions } from './types';
+import { Node } from 'prosemirror-model';
+import { EditorView, NodeView } from 'prosemirror-view';
 import { placeholderFieldClass, placeholderFieldContentClass } from './schema';
 import { updateDOMAttributes } from './helpers';
 import { setPlaceholderFieldDOMAttrs } from './schema';
 
-export class PlaceholderFieldView {
-  options;
+export class PlaceholderFieldView implements NodeView {
+  options: NodeViewUserOptions;
 
-  node;
+  node: Node;
 
-  view;
+  view: EditorView;
 
-  getPos;
+  getPos: () => number | undefined;
 
-  decorations;
+  root!: HTMLElement;
 
-  innerDecorations;
-
-  root;
-
-  constructor(props, options = {}) {
-    this.options = { ...options };
-
+  constructor(props: NodeViewSpec) {
     this.node = props.node;
     this.view = props.view;
-    this.getPos = props.getPos
-    this.decorations = props.decorations;
-    this.innerDecorations = props.innerDecorations;
+    this.getPos = props.getPos;
+    this.options = props.options;
 
     this.handleClick = this.handleClick.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
@@ -32,15 +29,11 @@ export class PlaceholderFieldView {
     this.mount();
   }
 
-  get dom() {
+  get dom(): HTMLElement {
     return this.root;
   }
 
-  get contentDOM() {
-    return null;
-  }
-
-  mount() {
+  mount(): void {
     this.buildView();
     this.addEventListeners();
   }
@@ -109,14 +102,12 @@ export class PlaceholderFieldView {
     this.root = element;
   }
 
-  update(node, decorations, innerDecorations) {
+  update(node) {
     if (node.type !== this.node.type) {
       return false;
     }
 
     this.node = node;
-    this.decorations = decorations;
-    this.innerDecorations = innerDecorations;
 
     const domAttrs = setPlaceholderFieldDOMAttrs(this.node, {}); // TODO
     const style = this.getElementStyle();
@@ -136,13 +127,13 @@ export class PlaceholderFieldView {
 
   updateTextView() {
     const { attrs } = this.node;
-    const contentElement = this.dom.firstElementChild;
+    const contentElement = this.dom.firstElementChild as HTMLElement;
     contentElement.textContent = attrs.value || attrs.label;
   }
 
   updateUrlView() {
     const { attrs } = this.node;
-    const contentElement = this.dom.firstElementChild;
+    const contentElement = this.dom.firstElementChild as HTMLElement;
     if (attrs.value) {
       const link = document.createElement('a');
       link.href = attrs.value;
