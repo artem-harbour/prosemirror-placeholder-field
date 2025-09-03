@@ -33,6 +33,6 @@ export interface NodeViewSpec {
   node: Node
   view: EditorView
   getPos: () => number | undefined
-
+  //
   options: NodeViewUserOptions
 }

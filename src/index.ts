@@ -23,6 +23,7 @@ import {
   updatePlaceholderFieldAttrs,
   updatePlaceholderFieldById,
   deletePlaceholderFieldById,
+  replacePlaceholderFieldWithValue,
 } from './commands';
 
 import { 
@@ -61,6 +62,7 @@ export {
   updatePlaceholderFieldAttrs,
   updatePlaceholderFieldById,
   deletePlaceholderFieldById,
+  replacePlaceholderFieldWithValue,
 
   // helpers
   updateDOMAttributes,

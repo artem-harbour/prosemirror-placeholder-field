@@ -101,3 +101,35 @@ export function deletePlaceholderFieldById(
     return true;
   };
 }
+
+// TODO: Field kinds, replacer node/func?
+export function replacePlaceholderFieldWithValue(
+  id: string | string[],
+): Command {
+  return (state, dispatch) => {
+    const fields = findPlaceholderFieldsById(id, state);
+    if (!fields.length) return true;
+    if (dispatch) {
+      const tr = state.tr;
+      tr.setMeta('addToHistory', false);
+      fields.forEach((field) => {
+        const { node, pos } = field;
+        const posFrom = tr.mapping.map(pos);
+        const $posFrom = tr.doc.resolve(posFrom);
+        const posTo = tr.mapping.map(pos + node.nodeSize);
+        const currentNode = tr.doc.nodeAt(posFrom);
+        const currentMarks = $posFrom.marks();
+        const marks = currentMarks.length ? [...currentMarks] : undefined;
+        if (currentNode && node.eq(currentNode)) {
+          if (node.attrs.kind === 'text') {
+            const value = node.attrs.value || ' '; // empty text nodes are not allowed
+            const textNode = state.schema.text(value, marks);
+            tr.replaceWith(posFrom, posTo, textNode);
+          }
+        }
+      });
+      dispatch(tr);
+    }
+    return true;
+  };
+}

@@ -46,7 +46,7 @@ export function placeholderFieldNode(options: PlaceholderFieldNodeOptions = {}) 
   };
 }
 
-function getPlaceholderFieldAttrs(dom: HTMLElement | string, extraAttrs: Attrs): Attrs {
+function getPlaceholderFieldAttrs(dom: HTMLElement | string, extraAttrs: Attrs = {}): Attrs {
   if (typeof dom === 'string') {
     return {};
   }
@@ -69,7 +69,7 @@ function getPlaceholderFieldAttrs(dom: HTMLElement | string, extraAttrs: Attrs):
   return result;
 }
 
-function placeholderFieldToDOM(node: Node, extraAttrs: Attrs) {
+function placeholderFieldToDOM(node: Node, extraAttrs: Attrs = {}) {
   const attrs = node.attrs;
   const domAttrs = setPlaceholderFieldDOMAttrs(node, extraAttrs);
 
@@ -82,7 +82,7 @@ function placeholderFieldToDOM(node: Node, extraAttrs: Attrs) {
   return ['span', domAttrs, contentContainer];
 }
 
-export function setPlaceholderFieldDOMAttrs(node: Node, extraAttrs: Attrs): Attrs {
+export function setPlaceholderFieldDOMAttrs(node: Node, extraAttrs: Attrs = {}): Attrs {
   const attrs = node.attrs;
 
   const result: MutableAttrs = {

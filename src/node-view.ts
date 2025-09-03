@@ -1,11 +1,12 @@
 
 import { NodeViewSpec, NodeViewUserOptions } from './types';
 import { Node } from 'prosemirror-model';
-import { EditorView, NodeView } from 'prosemirror-view';
+import { EditorView, NodeView, ViewMutationRecord } from 'prosemirror-view';
 import { placeholderFieldClass, placeholderFieldContentClass } from './schema';
 import { updateDOMAttributes } from './helpers';
 import { setPlaceholderFieldDOMAttrs } from './schema';
 
+// TODO: kinds - url, image, checkbox, html?
 export class PlaceholderFieldView implements NodeView {
   options: NodeViewUserOptions;
 
@@ -50,13 +51,13 @@ export class PlaceholderFieldView implements NodeView {
     element.append(contentElement);
 
     const style = this.getElementStyle();
-    const domAttrs = setPlaceholderFieldDOMAttrs(this.node, {}); // TODO
+    const domAttrs = setPlaceholderFieldDOMAttrs(this.node);
     updateDOMAttributes(element, { ...domAttrs, style });
 
     return { element, contentElement };
   }
 
-  getElementStyle() {
+  getElementStyle(): string {
     const { attrs } = this.node;
     const { color } = attrs;
     const style = [
@@ -67,10 +68,9 @@ export class PlaceholderFieldView implements NodeView {
     return style;
   }
 
-  buildView() {
+  buildView(): void {
     const handlers = {
       text: () => this.buildTextView(),
-      url: () => this.buildUrlView(),
       default: () => this.buildTextView(),
     };
 
@@ -78,44 +78,26 @@ export class PlaceholderFieldView implements NodeView {
     handleBuild();
   }
 
-  buildTextView() {
+  buildTextView(): void {
     const { attrs } = this.node;
     const { element, contentElement } = this.createElement();
     contentElement.textContent = attrs.value || attrs.label;
     this.root = element;
   }
 
-  buildUrlView() {
-    const { attrs } = this.node;
-    const { element, contentElement } = this.createElement();
-    if (attrs.value) {
-      const link = document.createElement('a');
-      link.href = attrs.value;
-      link.target = '_blank';
-      link.textContent = attrs.value;
-      link.style.textDecoration = 'none';
-      contentElement.append(link);
-      contentElement.style.pointerEvents = 'all';
-    } else {
-      contentElement.textContent = attrs.label;
-    }
-    this.root = element;
-  }
-
-  update(node) {
+  update(node: Node) {
     if (node.type !== this.node.type) {
       return false;
     }
 
     this.node = node;
 
-    const domAttrs = setPlaceholderFieldDOMAttrs(this.node, {}); // TODO
+    const domAttrs = setPlaceholderFieldDOMAttrs(this.node);
     const style = this.getElementStyle();
     updateDOMAttributes(this.root, { ...domAttrs, style });
 
     const handlers = {
       text: () => this.updateTextView(),
-      url: () => this.updateUrlView(),
       default: () => this.updateTextView(),
     };
 
@@ -125,40 +107,23 @@ export class PlaceholderFieldView implements NodeView {
     return true;
   }
 
-  updateTextView() {
+  updateTextView(): void {
     const { attrs } = this.node;
     const contentElement = this.dom.firstElementChild as HTMLElement;
     contentElement.textContent = attrs.value || attrs.label;
   }
 
-  updateUrlView() {
-    const { attrs } = this.node;
-    const contentElement = this.dom.firstElementChild as HTMLElement;
-    if (attrs.value) {
-      const link = document.createElement('a');
-      link.href = attrs.value;
-      link.target = '_blank';
-      link.textContent = attrs.value;
-      link.style.textDecoration = 'none';
-      contentElement.replaceChildren(link)
-      contentElement.style.pointerEvents = 'all';
-    } else {
-      contentElement.textContent = attrs.label;
-      contentElement.style.pointerEvents = 'none';
-    }
-  }
-
-  addEventListeners() {
+  addEventListeners(): void {
     this.dom.addEventListener('click', this.handleClick);
     this.dom.addEventListener('dblclick', this.handleDoubleClick);
   }
 
-  removeEventListeners() {
+  removeEventListeners(): void {
     this.dom.removeEventListener('click', this.handleClick);
     this.dom.removeEventListener('dblclick', this.handleDoubleClick);
   }
 
-  handleClick(event) {
+  handleClick(event: Event): void {
     if (!this.view.editable) {
       return;
     }
@@ -174,7 +139,7 @@ export class PlaceholderFieldView implements NodeView {
     }));
   }
 
-  handleDoubleClick(event) {
+  handleDoubleClick(event: Event): void {
     if (!this.view.editable) {
       return;
     }
@@ -190,22 +155,22 @@ export class PlaceholderFieldView implements NodeView {
     }));
   }
 
-  destroy() {
+  destroy(): void {
     this.removeEventListeners();
     this.dom.remove();
   }
 
-  stopEvent(event) { 
+  stopEvent(event: Event) { 
     return false;
   }
 
-  ignoreMutation(mutation) {
+  ignoreMutation(mutation: ViewMutationRecord) {
     // A leaf/atom node is like a black box for ProseMirror
     // and should be fully handled by the node view.
     return true;
   }
 
-  updateAttributes(attrs) {
+  updateAttributes(attrs: Record<string, any>): void {
     const pos = this.getPos();
 
     if (typeof pos !== 'number') {
