@@ -1,5 +1,5 @@
 import type { Node, NodeSpec } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
+import { EditorView, NodeView } from 'prosemirror-view';
 
 export type NodeWithPos = {
   node: Node
@@ -23,6 +23,12 @@ export interface PlaceholderFieldAttributes {
 }
 
 export type PlaceholderFieldNode = Record<'placeholderField', NodeSpec>
+
+export interface PlaceholderFieldEditingOptions {
+  View?:
+    | (new (props: NodeViewSpec) => NodeView)
+    | null;
+}
 
 export interface PlaceholderFieldNodeOptions {
   defaultColor?: string,

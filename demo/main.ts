@@ -12,8 +12,8 @@ import { schema as baseSchema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { 
-  placeholderFieldNode, 
-  PlaceholderFieldView, 
+  placeholderFieldNode,
+  placeholderFieldEditing,
   placeholderFieldDrop,
   placeholderFieldPaste,
   insertPlaceholderField,
@@ -30,6 +30,7 @@ const schema = new Schema({
 
 const plugins = [
   ...exampleSetup({ schema }),
+  placeholderFieldEditing(),
   placeholderFieldDrop(),
   placeholderFieldPaste(),
 ];
@@ -39,12 +40,7 @@ const state = EditorState.create({
   plugins,
 });
 
-const view = new EditorView(document.querySelector('#editor'), { 
-  state,
-  nodeViews: {
-    placeholderField: (node, view, getPos) => new PlaceholderFieldView({ node, view, getPos }),
-  },
-});
+const view = new EditorView(document.querySelector('#editor'), { state });
 
 window.view = view;
 

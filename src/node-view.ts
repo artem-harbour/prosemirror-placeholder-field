@@ -72,7 +72,7 @@ export class PlaceholderFieldView implements NodeView {
   }
 
   buildView(): void {
-    const handlers = {
+    const handlers: Record<string, () => void> = {
       text: () => this.buildTextView(),
       default: () => this.buildTextView(),
     };
@@ -99,7 +99,7 @@ export class PlaceholderFieldView implements NodeView {
     const style = this.getElementStyle();
     updateDOMAttributes(this.root, { ...domAttrs, style });
 
-    const handlers = {
+    const handlers: Record<string, () => void> = {
       text: () => this.updateTextView(),
       default: () => this.updateTextView(),
     };

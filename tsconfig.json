@@ -12,7 +12,7 @@
     "declarationDir": ".",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    // "noImplicitAny": false,
   },
   "compileOnSave": true,
   "include": ["src/**/*.ts"],

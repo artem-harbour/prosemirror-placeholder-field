@@ -3,6 +3,8 @@ export { placeholderFieldNode } from './schema';
 export { PlaceholderFieldView } from './node-view';
 
 export {
+  placeholderFieldEditing,
+  placeholderFieldEditingKey,
   placeholderFieldDrop,
   placeholderFieldDropKey,
   placeholderFieldPaste,

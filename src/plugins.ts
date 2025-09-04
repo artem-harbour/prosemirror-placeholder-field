@@ -1,6 +1,27 @@
 import { Plugin, PluginKey } from 'prosemirror-state';
-import { insertPlaceholderField } from './commands';
 import { EditorView } from 'prosemirror-view';
+import { PlaceholderFieldView } from './node-view';
+import { insertPlaceholderField } from './commands';
+import { placeholderFieldTypeName } from './schema';
+import { PlaceholderFieldEditingOptions } from './types';
+
+export const placeholderFieldEditingKey = new PluginKey('placeholderFieldEditing');
+
+export function placeholderFieldEditing({
+  View = PlaceholderFieldView,
+}: PlaceholderFieldEditingOptions = {}): Plugin {
+  const plugin = new Plugin({
+    key: placeholderFieldEditingKey,
+    props: {
+      nodeViews: View ? {
+        [placeholderFieldTypeName]: (node, view, getPos) => {
+          return new View({ node, view, getPos });
+        }
+      } : {}
+    },
+  });
+  return plugin;
+}
 
 export const placeholderFieldDropKey = new PluginKey('placeholderFieldDrop');
 
