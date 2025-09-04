@@ -1,6 +1,6 @@
 import { Node } from 'prosemirror-model';
-import { NodeWithPos } from './types';
 import { EditorState } from 'prosemirror-state';
+import { NodeWithPos } from './types';
 
 const defaultBooleans = [
   'required',
@@ -64,7 +64,7 @@ export function getAllPlaceholderFields(
 }
 
 export function findPlaceholderFields(
-  predicate: (node) => boolean, 
+  predicate: (node: Node) => boolean,
   state: EditorState,
 ): NodeWithPos[] {
   const allPlaceholderFields = getAllPlaceholderFields(state);

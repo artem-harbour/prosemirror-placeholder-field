@@ -8,7 +8,7 @@ import { setPlaceholderFieldDOMAttrs } from './schema';
 
 // TODO: kinds - url, image, checkbox, html?
 export class PlaceholderFieldView implements NodeView {
-  options: NodeViewUserOptions;
+  // options: NodeViewUserOptions;
 
   node: Node;
 
@@ -22,7 +22,7 @@ export class PlaceholderFieldView implements NodeView {
     this.node = props.node;
     this.view = props.view;
     this.getPos = props.getPos;
-    this.options = props.options;
+    // this.options = props.options;
 
     this.handleClick = this.handleClick.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);

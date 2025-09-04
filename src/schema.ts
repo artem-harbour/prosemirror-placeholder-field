@@ -1,17 +1,18 @@
+
+import { Attrs, Node, DOMOutputSpec, AttributeSpec } from 'prosemirror-model';
 import { 
   MutableAttrs,
+  PlaceholderFieldNode,
   PlaceholderFieldNodeOptions,
 } from './types';
-import { Attrs, Node, AttributeSpec } from 'prosemirror-model';
 
 export const placeholderFieldTypeName = 'placeholderField';
-
 export const placeholderFieldClass = 'placeholder-field';
 export const placeholderFieldContentClass = 'placeholder-field__content';
 
-export function placeholderFieldNode(options: PlaceholderFieldNodeOptions = {}) {
+export function placeholderFieldNode(options: PlaceholderFieldNodeOptions = {}): PlaceholderFieldNode {
   const extraAttrs = options.extraAttributes || {};
-  const defaultColor = options.color || '#7c3aed';
+  const defaultColor = options.defaultColor || '#7c3aed';
 
   const attrs: Record<string, AttributeSpec> = {
     id: { default: null, validate: 'string|null' },
@@ -69,7 +70,7 @@ function getPlaceholderFieldAttrs(dom: HTMLElement | string, extraAttrs: Attrs =
   return result;
 }
 
-function placeholderFieldToDOM(node: Node, extraAttrs: Attrs = {}) {
+function placeholderFieldToDOM(node: Node, extraAttrs: Attrs = {}): DOMOutputSpec {
   const attrs = node.attrs;
   const domAttrs = setPlaceholderFieldDOMAttrs(node, extraAttrs);
 

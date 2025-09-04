@@ -1,6 +1,6 @@
 import { Command } from 'prosemirror-state';
-import { NodeWithPos } from './types';
 import { findPlaceholderFieldsById } from './helpers';
+import { NodeWithPos } from './types';
 
 export function insertPlaceholderField(
   pos: number, 
@@ -102,7 +102,7 @@ export function deletePlaceholderFieldById(
   };
 }
 
-// TODO: Field kinds, replacer node/func?
+// TODO: Add field types or replacer func param?
 export function replacePlaceholderFieldWithValue(
   id: string | string[],
 ): Command {

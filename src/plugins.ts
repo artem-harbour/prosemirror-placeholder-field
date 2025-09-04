@@ -1,5 +1,6 @@
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { insertPlaceholderField } from './commands';
+import { EditorView } from 'prosemirror-view';
 
 export const placeholderFieldDropKey = new PluginKey('placeholderFieldDrop');
 
@@ -16,7 +17,7 @@ export function placeholderFieldDrop(
           return false;
         }
 
-        const placeholderField = event?.dataTransfer?.getData('placeholderField');
+        const placeholderField = event.dataTransfer?.getData('placeholderField');
 
         if (placeholderField) {
           if (handleOutside) {
@@ -26,7 +27,7 @@ export function placeholderFieldDrop(
               event,
             });
           } else {
-            let placeholderFieldData;
+            let placeholderFieldData: Record<string, any>;
 
             try {
               placeholderFieldData = JSON.parse(placeholderField);
@@ -54,7 +55,15 @@ export function placeholderFieldDrop(
   });
 }
 
-function handleDropOutside({ placeholderField, view, event }) {
+interface DropOutsideOptions  {
+  placeholderField: string | undefined
+  view: EditorView
+  event: DragEvent
+}
+
+function handleDropOutside({ placeholderField, view, event }: DropOutsideOptions) {
+  if (!placeholderField) return;
+
   let placeholderFieldData;
   try {
     placeholderFieldData = JSON.parse(placeholderField);

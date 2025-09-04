@@ -20,7 +20,6 @@
     "dist"
   ],
   "dependencies": {
-    "prosemirror-commands": "^1.7.1",
     "prosemirror-model": "^1.25.3",
     "prosemirror-state": "^1.4.3",
     "prosemirror-view": "^1.40.1"
@@ -28,19 +27,27 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
+    "prosemirror-commands": "^1.7.1",
+    "prosemirror-example-setup": "^1.2.3",
+    "prosemirror-menu": "^1.2.5",
+    "prosemirror-schema-basic": "^1.2.4",
+    "prosemirror-schema-list": "^1.5.1",
     "rollup": "^4.47.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-typescript2": "^0.36.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vite": "^7.1.4",
+    "vitest": "^3.2.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/artemnistuley/prosemirror-placeholder-field"
   },
   "scripts": {
-    "start": "npm --prefix ./demo run start",
-    "dev": "npm run start",
+    "dev": "vite demo",
+    "build_demo": "vite build demo",
     "prebuild": "rm -rf dist",
+    "test": "vitest",
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "reset": "rm -rf ./node_modules && rm -rf ./package-lock.json && npm install"

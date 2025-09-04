@@ -2,14 +2,14 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "esnext",
-    "lib": ["es6", "es2015", "dom", "es2017"],
+    "lib": ["es6", "dom", "esnext"],
     "strict": true,
     "skipLibCheck": true,
+    "noEmit": true, //
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "./dist",
-    "outDir": "./dist",
+    "declarationDir": ".",
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "noImplicitAny": false,

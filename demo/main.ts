@@ -16,7 +16,10 @@ import {
   PlaceholderFieldView, 
   placeholderFieldDrop,
   placeholderFieldPaste,
-} from 'prosemirror-placeholder-field';
+  insertPlaceholderField,
+  updatePlaceholderFieldById,
+  replacePlaceholderFieldWithValue,
+} from '../src';
 
 const nodes = addListNodes(baseSchema.spec.nodes, 'paragraph block*', 'block');
 
@@ -32,17 +35,28 @@ const plugins = [
 ];
 
 const state = EditorState.create({
-  doc: DOMParser.fromSchema(schema).parse(document.querySelector("#content")),
+  doc: DOMParser.fromSchema(schema).parse(document.querySelector("#content") as HTMLElement),
   plugins,
 });
 
 const view = new EditorView(document.querySelector('#editor'), { 
   state,
   nodeViews: {
-    placeholderField: (node, view, getPos, decorations) => new PlaceholderFieldView({ node, view, getPos, decorations }),
+    placeholderField: (node, view, getPos) => new PlaceholderFieldView({ node, view, getPos }),
   },
 });
 
 window.view = view;
 
-// insertPlaceholderField(2, { label: 'Text field', id: `222` })(view.state, view.dispatch);
+// insertPlaceholderField(10, { label: 'Text field', id: `111` })(view.state, view.dispatch);
+
+const input = document.querySelector('.demo-input');
+input!.addEventListener('input', (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const value = target.value;
+  updatePlaceholderFieldById(['111'], { value })(view.state, view.dispatch);
+});
+
+// setTimeout(() => {
+//   replacePlaceholderFieldWithValue(['111'])(view.state, view.dispatch);
+// }, 5000);

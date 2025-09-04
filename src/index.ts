@@ -1,23 +1,15 @@
-import { 
-  NodeWithPos,
-  MutableAttrs,
-  getFromDOM,
-  setDOMAttr,
-  PlaceholderFieldAttributes,
-  PlaceholderFieldNodeOptions,
-} from './types';
+export { placeholderFieldNode } from './schema';
 
-import { placeholderFieldNode } from './schema';
-import { PlaceholderFieldView } from './node-view';
+export { PlaceholderFieldView } from './node-view';
 
-import {
+export {
   placeholderFieldDrop,
   placeholderFieldDropKey,
   placeholderFieldPaste,
   placeholderFieldPasteKey,
 } from './plugins';
 
-import { 
+export {
   insertPlaceholderField,
   deletePlaceholderField,
   updatePlaceholderFieldAttrs,
@@ -26,7 +18,7 @@ import {
   replacePlaceholderFieldWithValue,
 } from './commands';
 
-import { 
+export {
   updateDOMAttributes,
   isPlaceholderField,
   getAllPlaceholderFields,
@@ -35,40 +27,12 @@ import {
   findPlaceholderFieldsBetween,
 } from './helpers';
 
-export {
-  // types
+export type {
   NodeWithPos,
   MutableAttrs,
   getFromDOM,
   setDOMAttr,
   PlaceholderFieldAttributes,
+  PlaceholderFieldNode,
   PlaceholderFieldNodeOptions,
-
-  // schema
-  placeholderFieldNode,
-
-  // view
-  PlaceholderFieldView,
-
-  // plugins
-  placeholderFieldDrop,
-  placeholderFieldDropKey,
-  placeholderFieldPaste,
-  placeholderFieldPasteKey,
-
-  // commands
-  insertPlaceholderField,
-  deletePlaceholderField,
-  updatePlaceholderFieldAttrs,
-  updatePlaceholderFieldById,
-  deletePlaceholderFieldById,
-  replacePlaceholderFieldWithValue,
-
-  // helpers
-  updateDOMAttributes,
-  isPlaceholderField,
-  getAllPlaceholderFields,
-  findPlaceholderFields,
-  findPlaceholderFieldsById,
-  findPlaceholderFieldsBetween,
-};
+} from './types'
