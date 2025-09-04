@@ -6,7 +6,7 @@ import { placeholderFieldClass, placeholderFieldContentClass } from './schema';
 import { updateDOMAttributes } from './helpers';
 import { setPlaceholderFieldDOMAttrs } from './schema';
 
-// TODO: kinds - url, image, checkbox, html?
+// TODO: add kinds, build/update handlers to options?
 export class PlaceholderFieldView implements NodeView {
   // options: NodeViewUserOptions;
 
@@ -39,7 +39,10 @@ export class PlaceholderFieldView implements NodeView {
     this.addEventListeners();
   }
 
-  createElement() {
+  createElement(): {
+    element: HTMLSpanElement
+    contentElement: HTMLSpanElement
+  } {
     const element = document.createElement('span');
     element.classList.add(placeholderFieldClass);
 
