@@ -96,6 +96,7 @@ body {
   padding: 5px 0;
   margin-bottom: 23px;
   max-width: 720px;
+  width: 100%;
 }
 
 .ProseMirror {

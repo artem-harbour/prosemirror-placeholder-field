@@ -41,8 +41,11 @@ const state = EditorState.create({
 });
 
 const view = new EditorView(document.querySelector('#editor'), { state });
-
 window.view = view;
+
+
+
+/// Testing.
 
 // insertPlaceholderField(10, { label: 'Text field', id: `111` })(view.state, view.dispatch);
 
