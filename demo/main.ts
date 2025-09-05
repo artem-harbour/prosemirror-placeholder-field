@@ -12,13 +12,21 @@ import { schema as baseSchema } from 'prosemirror-schema-basic';
 import { addListNodes } from 'prosemirror-schema-list';
 import { exampleSetup } from 'prosemirror-example-setup';
 import { 
+  buildLinkView, 
+  updateLinkView,
+  buildImageView,
+  updateImageView,
+  replaceLink,
+  replaceImage,
+} from './helpers';
+import { 
   placeholderFieldNode,
   placeholderFieldEditing,
   placeholderFieldDrop,
   placeholderFieldPaste,
   insertPlaceholderField,
   updatePlaceholderFieldById,
-  replacePlaceholderFieldWithValue,
+  buildReplacePlaceholderFieldWithValue,
 } from '../src';
 
 const nodes = addListNodes(baseSchema.spec.nodes, 'paragraph block*', 'block');
@@ -30,9 +38,20 @@ const schema = new Schema({
 
 const plugins = [
   ...exampleSetup({ schema }),
-  placeholderFieldEditing(),
   placeholderFieldDrop(),
   placeholderFieldPaste(),
+  placeholderFieldEditing({
+    viewHandlers: {
+      link: {
+        buildView: buildLinkView,
+        updateView: updateLinkView,
+      },
+      image: {
+        buildView: buildImageView,
+        updateView: updateImageView,
+      },
+    },
+  }),
 ];
 
 const state = EditorState.create({
@@ -41,21 +60,47 @@ const state = EditorState.create({
 });
 
 const view = new EditorView(document.querySelector('#editor'), { state });
-window.view = view;
+(window as any).view = view;
 
-
-
-/// Testing.
-
-// insertPlaceholderField(10, { label: 'Text field', id: `111` })(view.state, view.dispatch);
-
-const input = document.querySelector('.demo-input');
-input!.addEventListener('input', (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const value = target.value;
-  updatePlaceholderFieldById(['111'], { value })(view.state, view.dispatch);
+const replacePlaceholderFieldWithValue = buildReplacePlaceholderFieldWithValue({
+  link: replaceLink,
+  image: replaceImage,
 });
 
-// setTimeout(() => {
-//   replacePlaceholderFieldWithValue(['111'])(view.state, view.dispatch);
-// }, 5000);
+// Example
+// insertPlaceholderField(0, { label: 'Text field', id: `111` })(view.state, view.dispatch);
+
+const inputName = document.querySelector('.demo-input--name');
+inputName!.addEventListener('input', (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  updatePlaceholderFieldById('1', { value })(view.state, view.dispatch);
+});
+
+const inputJob = document.querySelector('.demo-input--job');
+inputJob!.addEventListener('input', (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  updatePlaceholderFieldById('2', { value })(view.state, view.dispatch);
+});
+
+const inputCompany = document.querySelector('.demo-input--company');
+inputCompany!.addEventListener('input', (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  updatePlaceholderFieldById('3', { value })(view.state, view.dispatch);
+});
+
+const inputWebsite = document.querySelector('.demo-input--website');
+inputWebsite!.addEventListener('input', (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  updatePlaceholderFieldById('4', { value })(view.state, view.dispatch);
+});
+
+const inputImage = document.querySelector('.demo-input--image');
+inputImage!.addEventListener('input', (event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
+  updatePlaceholderFieldById('5', { value })(view.state, view.dispatch);
+});
+
+const replaceButton = document.querySelector('.demo-button');
+replaceButton!.addEventListener('click', (event: Event) => {
+  replacePlaceholderFieldWithValue(['1', '2', '3', '4', '5'])(view.state, view.dispatch);
+});

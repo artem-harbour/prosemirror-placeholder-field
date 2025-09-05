@@ -1,6 +1,6 @@
 import { Command } from 'prosemirror-state';
 import { findPlaceholderFieldsById } from './helpers';
-import { NodeWithPos } from './types';
+import { NodeWithPos, ReplacerProps, ReplacerFn } from './types';
 
 export function insertPlaceholderField(
   pos: number, 
@@ -102,9 +102,9 @@ export function deletePlaceholderFieldById(
   };
 }
 
-// TODO: Add field types or replacer func param?
 export function replacePlaceholderFieldWithValue(
   id: string | string[],
+  replacers: Record<string, ReplacerFn> = {},
 ): Command {
   return (state, dispatch) => {
     const fields = findPlaceholderFieldsById(id, state);
@@ -120,16 +120,30 @@ export function replacePlaceholderFieldWithValue(
         const currentNode = tr.doc.nodeAt(posFrom);
         const currentMarks = $posFrom.marks();
         const marks = currentMarks.length ? [...currentMarks] : undefined;
+        const replaceText = () => {
+          const value = node.attrs.value || ' '; // empty text nodes are not allowed
+          const textNode = state.schema.text(value, marks);
+          tr.replaceWith(posFrom, posTo, textNode);
+        };
+        const handlers: Record<string, ReplacerFn> = { ...replacers, text: replaceText };
+        const replace: ReplacerFn = handlers[node.attrs.kind] ?? handlers.text;
         if (currentNode && node.eq(currentNode)) {
-          if (node.attrs.kind === 'text') {
-            const value = node.attrs.value || ' '; // empty text nodes are not allowed
-            const textNode = state.schema.text(value, marks);
-            tr.replaceWith(posFrom, posTo, textNode);
-          }
+          replace({
+            state,
+            tr,
+            node,
+            pos,
+            from: posFrom,
+            to: posTo,
+          });
         }
       });
       dispatch(tr);
     }
     return true;
   };
+}
+
+export function buildReplacePlaceholderFieldWithValue(replacers: Record<string, ReplacerFn>) {
+  return (id: string | string[]) => replacePlaceholderFieldWithValue(id, replacers);
 }

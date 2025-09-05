@@ -1,5 +1,6 @@
-import type { Node, NodeSpec } from 'prosemirror-model';
-import { EditorView, NodeView } from 'prosemirror-view';
+import type { Node, NodeSpec, Attrs } from 'prosemirror-model';
+import { EditorView } from 'prosemirror-view';
+import { EditorState, Transaction } from 'prosemirror-state';
 
 export type NodeWithPos = {
   node: Node
@@ -24,23 +25,32 @@ export interface PlaceholderFieldAttributes {
 
 export type PlaceholderFieldNode = Record<'placeholderField', NodeSpec>
 
-export interface PlaceholderFieldEditingOptions {
-  View?:
-    | (new (props: NodeViewSpec) => NodeView)
-    | null;
-}
-
 export interface PlaceholderFieldNodeOptions {
   defaultColor?: string,
   extraAttributes?: { [key: string]: PlaceholderFieldAttributes };
 }
 
-export interface NodeViewUserOptions {}
+export interface NodeViewUserOptions {
+  viewHandlers?: { [key: string]: { buildView?: () => void, updateView?: () => void } }
+  extraAttributes?: { [key: string]: PlaceholderFieldAttributes }
+  setDOMAttrs?: (node: Node) => Attrs,
+}
 
 export interface NodeViewSpec {
   node: Node
   view: EditorView
   getPos: () => number | undefined
   //
-  // options: NodeViewUserOptions
+  options?: NodeViewUserOptions
 }
+
+export interface ReplacerProps {
+  state: EditorState
+  tr: Transaction
+  node: Node
+  pos: number
+  from: number,
+  to: number,
+}
+
+export type ReplacerFn = (props: ReplacerProps ) => void;

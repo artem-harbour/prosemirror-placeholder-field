@@ -18,6 +18,7 @@ export {
   updatePlaceholderFieldById,
   deletePlaceholderFieldById,
   replacePlaceholderFieldWithValue,
+  buildReplacePlaceholderFieldWithValue,
 } from './commands';
 
 export {
@@ -37,4 +38,8 @@ export type {
   PlaceholderFieldAttributes,
   PlaceholderFieldNode,
   PlaceholderFieldNodeOptions,
+  NodeViewUserOptions,
+  NodeViewSpec,
+  ReplacerProps,
+  ReplacerFn,
 } from './types'

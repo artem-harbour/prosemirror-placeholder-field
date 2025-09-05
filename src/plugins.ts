@@ -3,21 +3,19 @@ import { EditorView } from 'prosemirror-view';
 import { PlaceholderFieldView } from './node-view';
 import { insertPlaceholderField } from './commands';
 import { placeholderFieldTypeName } from './schema';
-import { PlaceholderFieldEditingOptions } from './types';
+import { NodeViewUserOptions } from './types';
 
 export const placeholderFieldEditingKey = new PluginKey('placeholderFieldEditing');
 
-export function placeholderFieldEditing({
-  View = PlaceholderFieldView,
-}: PlaceholderFieldEditingOptions = {}): Plugin {
+export function placeholderFieldEditing(options?: NodeViewUserOptions): Plugin {
   const plugin = new Plugin({
     key: placeholderFieldEditingKey,
     props: {
-      nodeViews: View ? {
+      nodeViews: {
         [placeholderFieldTypeName]: (node, view, getPos) => {
-          return new View({ node, view, getPos });
+          return new PlaceholderFieldView({ node, view, getPos, options });
         }
-      } : {}
+      },
     },
   });
   return plugin;

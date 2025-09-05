@@ -21,7 +21,14 @@
             <div class="demo-app__content">
               <div id="editor" class="editor-container"></div>
 
-              <input class="demo-input" type="text">
+              <div class="demo-app__form">
+                <input class="demo-input demo-input--name" type="text" placeholder="Your name">
+                <input class="demo-input demo-input--job" type="text" placeholder="Job title">
+                <input class="demo-input demo-input--company" type="text" placeholder="Company">
+                <input class="demo-input demo-input--website" type="url" placeholder="Website URL">
+                <input class="demo-input demo-input--image" type="url" placeholder="Image location">
+                <button class="demo-button">Replace with values</button>
+              </div>
             </div>
           </div>
         </div>
@@ -30,9 +37,15 @@
     </div>
     
     <div style="display: none" id="content">
-      <h3>Hello, <span data-placeholder-field data-id="111" data-kind="text" data-label="Enter your name" data-color="#7c3aed"></span></h3>
+      <h2>Hello, I'm <span data-placeholder-field data-id="1" data-kind="text" data-name="name" data-label="Your name" data-color="#7c3aed"></span></h2>
+      
+      <p>I work as a <span data-placeholder-field data-id="2" data-kind="text" data-name="job_title" data-label="Job title" data-color="#7c3aed"></span> at <span data-placeholder-field data-id="3" data-kind="text" data-name="company" data-label="Company" data-color="#7c3aed"></span></p>
 
+      <p>Visit my website: <span data-placeholder-field data-id="4" data-kind="link" data-name="website" data-label="Website URL" data-color="#7c3aed"></span></p>
 
+      <p>Some funny image:</p>
+
+      <p><span data-placeholder-field data-id="5" data-kind="image" data-label="Your image" data-color="#7c3aed" data-value="https://prosemirror.net/img/dino/tyrannosaurus.png"></span></p>
     </div>
 
     <script type="module" src="./main.ts"></script>

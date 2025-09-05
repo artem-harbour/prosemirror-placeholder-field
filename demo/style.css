@@ -87,6 +87,15 @@ body {
   margin-bottom: 20px;
 }
 
+.demo-app__form {
+  max-width: 720px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
 #editor, .editor {
   background: white;
   color: black;

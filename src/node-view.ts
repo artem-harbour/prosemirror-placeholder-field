@@ -6,15 +6,14 @@ import { placeholderFieldClass, placeholderFieldContentClass } from './schema';
 import { updateDOMAttributes } from './helpers';
 import { setPlaceholderFieldDOMAttrs } from './schema';
 
-// TODO: add kinds, build/update handlers to options?
 export class PlaceholderFieldView implements NodeView {
-  // options: NodeViewUserOptions;
-
   node: Node;
 
   view: EditorView;
 
   getPos: () => number | undefined;
+
+  options?: NodeViewUserOptions;
 
   root!: HTMLElement;
 
@@ -22,7 +21,7 @@ export class PlaceholderFieldView implements NodeView {
     this.node = props.node;
     this.view = props.view;
     this.getPos = props.getPos;
-    // this.options = props.options;
+    this.options = props.options;
 
     this.handleClick = this.handleClick.bind(this);
     this.handleDoubleClick = this.handleDoubleClick.bind(this);
@@ -54,7 +53,11 @@ export class PlaceholderFieldView implements NodeView {
     element.append(contentElement);
 
     const style = this.getElementStyle();
-    const domAttrs = setPlaceholderFieldDOMAttrs(this.node);
+    const extraAttrs = this.options?.extraAttributes;
+    const domAttrs = this.options?.setDOMAttrs 
+      ? this.options.setDOMAttrs(this.node) 
+      : setPlaceholderFieldDOMAttrs(this.node, extraAttrs);
+      
     updateDOMAttributes(element, { ...domAttrs, style });
 
     return { element, contentElement };
@@ -77,6 +80,12 @@ export class PlaceholderFieldView implements NodeView {
       default: () => this.buildTextView(),
     };
 
+    const viewHandlers = this.options?.viewHandlers || {};
+    for (const prop in viewHandlers) {
+      const build = viewHandlers[prop].buildView;
+      if (build != null) handlers[prop] = () => build.apply(this);
+    }
+
     const handleBuild = handlers[this.node.attrs.kind] ?? handlers.default;
     handleBuild();
   }
@@ -88,21 +97,31 @@ export class PlaceholderFieldView implements NodeView {
     this.root = element;
   }
 
-  update(node: Node) {
+  update(node: Node): boolean {
     if (node.type !== this.node.type) {
       return false;
     }
 
     this.node = node;
 
-    const domAttrs = setPlaceholderFieldDOMAttrs(this.node);
     const style = this.getElementStyle();
+    const extraAttrs = this.options?.extraAttributes;
+    const domAttrs = this.options?.setDOMAttrs 
+      ? this.options.setDOMAttrs(this.node) 
+      : setPlaceholderFieldDOMAttrs(this.node, extraAttrs);
+
     updateDOMAttributes(this.root, { ...domAttrs, style });
 
     const handlers: Record<string, () => void> = {
       text: () => this.updateTextView(),
       default: () => this.updateTextView(),
     };
+
+    const viewHandlers = this.options?.viewHandlers || {};
+    for (const prop in viewHandlers) {
+      const update = viewHandlers[prop].updateView;
+      if (update != null) handlers[prop] = () => update.apply(this);
+    }
 
     const handleUpdate = handlers[this.node.attrs.kind] ?? handlers.default;
     handleUpdate();
@@ -163,11 +182,11 @@ export class PlaceholderFieldView implements NodeView {
     this.dom.remove();
   }
 
-  stopEvent(event: Event) { 
+  stopEvent(event: Event): boolean { 
     return false;
   }
 
-  ignoreMutation(mutation: ViewMutationRecord) {
+  ignoreMutation(mutation: ViewMutationRecord): boolean {
     // A leaf/atom node is like a black box for ProseMirror
     // and should be fully handled by the node view.
     return true;
