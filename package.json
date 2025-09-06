@@ -27,6 +27,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
+    "np": "^10.2.0",
     "prosemirror-commands": "^1.7.1",
     "prosemirror-example-setup": "^1.2.3",
     "prosemirror-menu": "^1.2.5",
@@ -46,10 +47,15 @@
   "scripts": {
     "dev": "vite demo",
     "build_demo": "vite build demo",
+    "typecheck": "tsc --noEmit",
     "prebuild": "rm -rf dist",
-    "test": "vitest",
     "build": "rollup -c",
     "watch": "rollup -c -w",
+    "prepublishOnly": "npm run build && npm run typecheck",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags",
+    "publish:np": "np",
+    "test": "vitest",
     "reset": "rm -rf ./node_modules && rm -rf ./package-lock.json && npm install"
   }
 }
