@@ -54,7 +54,6 @@
     "version": "git add -A src",
     "postversion": "git push && git push --tags",
     "publish:np": "np",
-    "test": "vitest",
     "reset": "rm -rf ./node_modules && rm -rf ./package-lock.json && npm install"
   }
 }
