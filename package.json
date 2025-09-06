@@ -16,7 +16,6 @@
   },
   "sideEffects": false,
   "files": [
-    "src",
     "dist"
   ],
   "dependencies": {
