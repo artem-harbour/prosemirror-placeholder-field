@@ -1,7 +1,14 @@
 import { Command } from 'prosemirror-state';
 import { findPlaceholderFieldsById } from './helpers';
-import { NodeWithPos, ReplacerProps, ReplacerFn } from './types';
+import { NodeWithPos, ReplacerFn } from './types';
 
+/**
+ * Inserts a field at the specified position in the document.
+ * @param pos The position in the document.
+ * @param attrs The field attributes.
+ * @example
+ * insertPlaceholderField(0, {id: '1', label: 'Text field'})(state, dispatch);
+ */
 export function insertPlaceholderField(
   pos: number, 
   attrs: Record<string, any> = {}
@@ -19,6 +26,10 @@ export function insertPlaceholderField(
   };
 }
 
+/**
+ * Removes fields in a document.
+ * @param fields The fields to remove.
+ */
 export function deletePlaceholderField(
   fields: NodeWithPos[]
 ): Command {
@@ -41,6 +52,11 @@ export function deletePlaceholderField(
   };
 }
 
+/**
+ * Updates fields attributes.
+ * @param fields Fields to update.
+ * @param attrs The field attributes.
+ */
 export function updatePlaceholderFieldAttrs(
   fields: NodeWithPos[], 
   attrs: Record<string, any> = {}
@@ -65,6 +81,15 @@ export function updatePlaceholderFieldAttrs(
   };
 }
 
+/**
+ * Updates fields by ID.
+ * @param id ID or list of field IDs.
+ * @param attrs The field attributes.
+ * @example
+ * updatePlaceholderFieldById('1', {value: 'Updated'})(state, dispatch);
+ * @example
+ * updatePlaceholderFieldById(['1', ''2'], {value: 'Updated'})(state, dispatch);
+ */
 export function updatePlaceholderFieldById(
   id: string | string[], 
   attrs: Record<string, any> = {}
@@ -79,6 +104,14 @@ export function updatePlaceholderFieldById(
   };
 }
 
+/**
+ * Removes fields in a document by ID.
+ * @param id ID or list of field IDs.
+ * @example
+ * deletePlaceholderFieldById('1')(state, dispatch);
+ * @example
+ * deletePlaceholderFieldById(['1', '2'])(state, dispatch);
+ */
 export function deletePlaceholderFieldById(
   id: string | string[]
 ): Command {
@@ -102,6 +135,13 @@ export function deletePlaceholderFieldById(
   };
 }
 
+/**
+ * Replaces fields with the actual value.
+ * @param id ID or list of field IDs.
+ * @param replacers Replacer functions for different field kinds.
+ * @example
+ * replacePlaceholderFieldWithValue(['1', '2'], {link: replaceLink, image: replaceImage});
+ */
 export function replacePlaceholderFieldWithValue(
   id: string | string[],
   replacers: Record<string, ReplacerFn> = {},
@@ -144,6 +184,10 @@ export function replacePlaceholderFieldWithValue(
   };
 }
 
+/**
+ * Helper function for creating a command that remembers replacer functions.
+ * @param replacers Replacer functions for different field kinds.
+ */
 export function buildReplacePlaceholderFieldWithValue(replacers: Record<string, ReplacerFn>) {
   return (id: string | string[]) => replacePlaceholderFieldWithValue(id, replacers);
 }
