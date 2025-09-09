@@ -1,5 +1,5 @@
 import { Command } from 'prosemirror-state';
-import { findPlaceholderFieldsById } from './helpers';
+import { findPlaceholderFieldsById, findPlaceholderFieldsByName } from './helpers';
 import { NodeWithPos, ReplacerFn } from './types';
 
 /**
@@ -88,7 +88,7 @@ export function updatePlaceholderFieldAttrs(
  * @example
  * updatePlaceholderFieldById('1', {value: 'Updated'})(state, dispatch);
  * @example
- * updatePlaceholderFieldById(['1', ''2'], {value: 'Updated'})(state, dispatch);
+ * updatePlaceholderFieldById(['1', '2'], {value: 'Updated'})(state, dispatch);
  */
 export function updatePlaceholderFieldById(
   id: string | string[], 
@@ -96,6 +96,29 @@ export function updatePlaceholderFieldById(
 ): Command {
   return (state, dispatch) => {
     const fields = findPlaceholderFieldsById(id, state);
+    if (!fields.length) return true;
+    if (dispatch) {
+      return updatePlaceholderFieldAttrs(fields, attrs)(state, dispatch);
+    }
+    return true;
+  };
+}
+
+/**
+ * Updates fields by name.
+ * @param name Name or list of names.
+ * @param attrs The field attributes.
+ * @example
+ * updatePlaceholderFieldByName('my_field1', {value: 'Updated'})(state, dispatch);
+ * @example
+ * updatePlaceholderFieldByName(['my_field1', 'my_field2'], {value: 'Updated'})(state, dispatch);
+ */
+export function updatePlaceholderFieldByName(
+  name: string | string[], 
+  attrs: Record<string, any> = {}
+): Command {
+  return (state, dispatch) => {
+    const fields = findPlaceholderFieldsByName(name, state);
     if (!fields.length) return true;
     if (dispatch) {
       return updatePlaceholderFieldAttrs(fields, attrs)(state, dispatch);

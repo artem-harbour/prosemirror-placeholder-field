@@ -16,6 +16,7 @@ export {
   deletePlaceholderField,
   updatePlaceholderFieldAttrs,
   updatePlaceholderFieldById,
+  updatePlaceholderFieldByName,
   deletePlaceholderFieldById,
   replacePlaceholderFieldWithValue,
   buildReplacePlaceholderFieldWithValue,
