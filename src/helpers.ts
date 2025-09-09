@@ -11,6 +11,12 @@ const defaultBooleans = [
   'autofocus',
 ];
 
+/**
+ * Updates attributes for DOM element.
+ * @param dom DOM element.
+ * @param attrs Attributes to update.
+ * @param options Additional options.
+ */
 export function updateDOMAttributes(
   dom: HTMLElement, 
   attrs: Record<string, any> = {}, 
@@ -34,6 +40,10 @@ export function updateDOMAttributes(
   });
 }
 
+/**
+ * Checks if it is a "placeholderField" node.
+ * @param node PM node.
+ */
 export function isPlaceholderField(node: Node): boolean {
   return node.type.name === 'placeholderField';
 }
@@ -56,6 +66,10 @@ function findChildren(
   return nodesWithPos;
 }
 
+/**
+ * Gets all fields in the state.
+ * @param state Editor state.
+ */
 export function getAllPlaceholderFields(
   state: EditorState,
 ): NodeWithPos[] {
@@ -63,6 +77,11 @@ export function getAllPlaceholderFields(
   return result;
 }
 
+/**
+ * Finds fields in the state by predicate.
+ * @param predicate Predicate fn.
+ * @param state Editor state.
+ */
 export function findPlaceholderFields(
   predicate: (node: Node) => boolean,
   state: EditorState,
@@ -79,6 +98,11 @@ export function findPlaceholderFields(
   return placeholderFields;
 }
 
+/**
+ * Finds fields in the state by ID attr.
+ * @param id ID or list of IDs.
+ * @param state Editor state.
+ */
 export function findPlaceholderFieldsById(
   id: string | string[], 
   state: EditorState,
@@ -93,6 +117,11 @@ export function findPlaceholderFieldsById(
   return placeholderFields;
 }
 
+/**
+ * Finds fields in the state by name attr.
+ * @param name Name or list of names.
+ * @param state Editor state.
+ */
 export function findPlaceholderFieldsByName(
   name: string | string[], 
   state: EditorState,
@@ -107,6 +136,12 @@ export function findPlaceholderFieldsByName(
   return placeholderFields;
 }
 
+/**
+ * Finds fields in the state between positions.
+ * @param from From pos.
+ * @param to To pos.
+ * @param state Editor state.
+ */
 export function findPlaceholderFieldsBetween(
   from: number, 
   to: number, 
