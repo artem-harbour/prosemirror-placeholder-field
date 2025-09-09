@@ -93,6 +93,20 @@ export function findPlaceholderFieldsById(
   return placeholderFields;
 }
 
+export function findPlaceholderFieldsByName(
+  name: string | string[], 
+  state: EditorState,
+): NodeWithPos[] {
+  const placeholderFields = findPlaceholderFields((node) => {
+    if (Array.isArray(name)) {
+      return isPlaceholderField(node) && name.includes(node.attrs.name);
+    } else {
+      return isPlaceholderField(node) && node.attrs.name === name;
+    }
+  }, state);
+  return placeholderFields;
+}
+
 export function findPlaceholderFieldsBetween(
   from: number, 
   to: number, 

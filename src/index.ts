@@ -27,6 +27,7 @@ export {
   getAllPlaceholderFields,
   findPlaceholderFields,
   findPlaceholderFieldsById,
+  findPlaceholderFieldsByName,
   findPlaceholderFieldsBetween,
 } from './helpers';
 
