@@ -70,37 +70,18 @@ const replacePlaceholderFieldWithValue = buildReplacePlaceholderFieldWithValue({
 // Example
 // insertPlaceholderField(0, { label: 'Text field', id: `111` })(view.state, view.dispatch);
 
-const inputName = document.querySelector('.demo-input--name');
-inputName!.addEventListener('input', (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  updatePlaceholderFieldById('1', { value })(view.state, view.dispatch);
+const demoInputs = [...document.querySelectorAll('.demo-input')] as HTMLInputElement[];
+const replaceButton = document.querySelector('.demo-button') as HTMLButtonElement;
+
+demoInputs.forEach((input) => {
+  input.addEventListener('input', (event: Event) => {
+    const target = (event.target as HTMLInputElement);
+    const value = target.value;
+    const id = target.dataset.id!;
+    updatePlaceholderFieldById(id, { value })(view.state, view.dispatch);
+  });
 });
 
-const inputJob = document.querySelector('.demo-input--job');
-inputJob!.addEventListener('input', (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  updatePlaceholderFieldById('2', { value })(view.state, view.dispatch);
-});
-
-const inputCompany = document.querySelector('.demo-input--company');
-inputCompany!.addEventListener('input', (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  updatePlaceholderFieldById('3', { value })(view.state, view.dispatch);
-});
-
-const inputWebsite = document.querySelector('.demo-input--website');
-inputWebsite!.addEventListener('input', (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  updatePlaceholderFieldById('4', { value })(view.state, view.dispatch);
-});
-
-const inputImage = document.querySelector('.demo-input--image');
-inputImage!.addEventListener('input', (event: Event) => {
-  const value = (event.target as HTMLInputElement).value;
-  updatePlaceholderFieldById('5', { value })(view.state, view.dispatch);
-});
-
-const replaceButton = document.querySelector('.demo-button');
-replaceButton!.addEventListener('click', (event: Event) => {
+replaceButton.addEventListener('click', (event: Event) => {
   replacePlaceholderFieldWithValue(null)(view.state, view.dispatch);
 });
