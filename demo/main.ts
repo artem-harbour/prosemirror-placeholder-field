@@ -102,5 +102,5 @@ inputImage!.addEventListener('input', (event: Event) => {
 
 const replaceButton = document.querySelector('.demo-button');
 replaceButton!.addEventListener('click', (event: Event) => {
-  replacePlaceholderFieldWithValue(['1', '2', '3', '4', '5'])(view.state, view.dispatch);
+  replacePlaceholderFieldWithValue(null)(view.state, view.dispatch);
 });

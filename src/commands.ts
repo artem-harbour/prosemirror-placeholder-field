@@ -1,5 +1,9 @@
 import { Command } from 'prosemirror-state';
-import { findPlaceholderFieldsById, findPlaceholderFieldsByName } from './helpers';
+import { 
+  getAllPlaceholderFields,
+  findPlaceholderFieldsById, 
+  findPlaceholderFieldsByName,
+} from './helpers';
 import { NodeWithPos, ReplacerFn } from './types';
 
 /**
@@ -160,17 +164,19 @@ export function deletePlaceholderFieldById(
 
 /**
  * Replaces fields with the actual value.
- * @param id ID or list of field IDs.
+ * @param id ID or list of field IDs, null for all fields.
  * @param replacers Replacer functions for different field kinds.
  * @example
- * replacePlaceholderFieldWithValue(['1', '2'], {link: replaceLink, image: replaceImage});
+ * replacePlaceholderFieldWithValue(['1', '2'], {link: replaceLink, image: replaceImage})(state, dispatch);
+ * @example
+ * replacePlaceholderFieldWithValue(null)(state, dispatch);
  */
 export function replacePlaceholderFieldWithValue(
-  id: string | string[],
+  id: string | string[] | null,
   replacers: Record<string, ReplacerFn> = {},
 ): Command {
   return (state, dispatch) => {
-    const fields = findPlaceholderFieldsById(id, state);
+    let fields = id != null ? findPlaceholderFieldsById(id, state) : getAllPlaceholderFields(state);
     if (!fields.length) return true;
     if (dispatch) {
       const tr = state.tr;
@@ -212,5 +218,5 @@ export function replacePlaceholderFieldWithValue(
  * @param replacers Replacer functions for different field kinds.
  */
 export function buildReplacePlaceholderFieldWithValue(replacers: Record<string, ReplacerFn>) {
-  return (id: string | string[]) => replacePlaceholderFieldWithValue(id, replacers);
+  return (id: string | string[] | null) => replacePlaceholderFieldWithValue(id, replacers);
 }
