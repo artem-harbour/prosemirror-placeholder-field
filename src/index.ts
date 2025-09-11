@@ -1,4 +1,9 @@
-export { placeholderFieldNode } from './schema';
+export { 
+  placeholderFieldNode,
+  placeholderFieldTypeName,
+  placeholderFieldClass,
+  placeholderFieldContentClass, 
+} from './schema';
 
 export { PlaceholderFieldView } from './node-view';
 
@@ -44,4 +49,4 @@ export type {
   NodeViewSpec,
   ReplacerProps,
   ReplacerFn,
-} from './types'
+} from './types';
