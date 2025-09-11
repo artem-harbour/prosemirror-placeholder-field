@@ -16,19 +16,29 @@
 
         <div class="demo-app__main">
           <div class="demo-app__view">
-            <div class="demo-app__actions"></div>
-            
             <div class="demo-app__content">
               <div id="editor" class="editor-container"></div>
 
-              <div class="demo-app__form">
-                <input class="demo-input demo-input--name" type="text" data-id="1" placeholder="Your name">
-                <input class="demo-input demo-input--job" type="text" data-id="2" placeholder="Job title">
-                <input class="demo-input demo-input--company" type="text" data-id="3" placeholder="Company">
-                <input class="demo-input demo-input--website" type="url" data-id="4" placeholder="Website URL">
-                <input class="demo-input demo-input--image" type="text" data-id="5" placeholder="Image location">
-                <button class="demo-button">Replace with values</button>
+              <div class="demo-app__actions">
+                <div class="demo-app__form">
+                  <input class="demo-input demo-input--name" type="text" data-id="1" placeholder="Your name">
+                  <input class="demo-input demo-input--job" type="text" data-id="2" placeholder="Job title">
+                  <input class="demo-input demo-input--company" type="text" data-id="3" placeholder="Company">
+                  <input class="demo-input demo-input--website" type="url" data-id="4" placeholder="Website URL">
+                  <input class="demo-input demo-input--image" type="text" data-id="5" placeholder="Image location">
+                  <button class="demo-button">Replace with values</button>
+                </div>
+
+                <div class="demo-app__fields">
+                  <div class="demo-app__field" draggable="true">
+                    <div class="demo-app__field-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical-icon lucide-grip-vertical"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                    </div>
+                    <div class="demo-app__field-title">Demo Field</div>
+                  </div>
+                </div>
               </div>
+
             </div>
           </div>
         </div>

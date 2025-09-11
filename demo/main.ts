@@ -18,6 +18,7 @@ import {
   updateImageView,
   replaceLink,
   replaceImage,
+  getRandomId,
 } from './helpers';
 import { 
   placeholderFieldNode,
@@ -38,7 +39,7 @@ const schema = new Schema({
 
 const plugins = [
   ...exampleSetup({ schema }),
-  placeholderFieldDrop(),
+  placeholderFieldDrop({ handleOutside: true }),
   placeholderFieldPaste(),
   placeholderFieldEditing({
     viewHandlers: {
@@ -67,10 +68,11 @@ const replacePlaceholderFieldWithValue = buildReplacePlaceholderFieldWithValue({
   image: replaceImage,
 });
 
-// Example
+// Demo
 // insertPlaceholderField(0, { label: 'Text field', id: `111` })(view.state, view.dispatch);
 
 const demoInputs = [...document.querySelectorAll('.demo-input')] as HTMLInputElement[];
+const demoDraggableField = document.querySelector('.demo-app__field') as HTMLElement;
 const replaceButton = document.querySelector('.demo-button') as HTMLButtonElement;
 
 demoInputs.forEach((input) => {
@@ -85,3 +87,39 @@ demoInputs.forEach((input) => {
 replaceButton.addEventListener('click', (event: Event) => {
   replacePlaceholderFieldWithValue(null)(view.state, view.dispatch);
 });
+
+// Example with handleOutside === true
+demoDraggableField.addEventListener('dragstart', (event) => {
+  event.dataTransfer!.clearData('placeholderField');
+  event.dataTransfer!.setData('placeholderField', JSON.stringify({
+    sourceField: 'demo',
+  }));
+});
+
+document.addEventListener('placeholderFieldDrop', (event) => {
+  const { detail } = event as CustomEvent;
+  const { pos, data } = detail;
+  if (data.sourceField === 'demo') {
+    insertPlaceholderField(pos, { 
+      id: getRandomId(),
+      kind: 'text',
+      label: 'Demo field',
+      value: 'Text value',
+    })(view.state, view.dispatch);
+  }
+});
+
+/*
+// Example with handleOutside === false
+demoDraggableField.addEventListener('dragstart', (event) => {
+  event.dataTransfer!.clearData('placeholderField');
+  event.dataTransfer!.setData('placeholderField', JSON.stringify({
+    attrs: {
+      id: getRandomId(),
+      kind: 'text',
+      label: 'Demo field',
+      value: 'Text value',
+    },
+  }));
+}); 
+*/

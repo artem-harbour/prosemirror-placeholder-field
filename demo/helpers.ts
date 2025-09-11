@@ -87,7 +87,7 @@ export const replaceLink: ReplacerFn = ({
   const link = state.schema.marks.link.create({ href: value, title: '' });
   const textNode = state.schema.text(value, [link]);
   tr.replaceWith(from, to, textNode);
-}
+};
 
 export const replaceImage: ReplacerFn = ({
   state,
@@ -103,4 +103,8 @@ export const replaceImage: ReplacerFn = ({
   } else {
     tr.replaceWith(from, to, state.schema.text(' '));
   }
-}
+};
+
+export const getRandomId = () => {
+  return Math.floor(Math.random() * 0xffffffff).toString();
+};
